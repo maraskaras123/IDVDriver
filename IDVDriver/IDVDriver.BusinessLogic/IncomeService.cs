@@ -16,9 +16,9 @@ namespace IDVDriver.BusinessLogic
         {
             using (var connection = new SqlConnection(ConnectionString))
             {
-                using (var cmd = new SqlCommand()
+                using (var cmd = new SqlCommand
                 {
-                    CommandText = SqlHelper.CreateInsert(typeof(Income)),
+                    CommandText = typeof(Income).CreateInsert(),
                     CommandType = CommandType.Text,
                     Connection = connection
                 })
@@ -45,7 +45,7 @@ namespace IDVDriver.BusinessLogic
             throw new NotImplementedException();
         }
 
-        public bool DeleteIncome(Income income)
+        public bool DeleteIncome(int incomeId)
         {
             throw new NotImplementedException();
         }
@@ -55,9 +55,9 @@ namespace IDVDriver.BusinessLogic
             var income = new Income();
             using (var connection = new SqlConnection(ConnectionString))
             {
-                using (var cmd = new SqlCommand()
+                using (var cmd = new SqlCommand
                 {
-                    CommandText = SqlHelper.CreateGet(typeof(Income)),
+                    CommandText = typeof(Income).CreateGet(),
                     CommandType = CommandType.Text,
                     Connection = connection
                 })
@@ -84,9 +84,9 @@ namespace IDVDriver.BusinessLogic
             var incomes = new List<Income>();
             using (var connection = new SqlConnection(ConnectionString))
             {
-                using (var cmd = new SqlCommand()
+                using (var cmd = new SqlCommand
                 {
-                    CommandText = SqlHelper.CreateGetAll(typeof(Income)),
+                    CommandText = typeof(Income).CreateGetAll(),
                     CommandType = CommandType.Text,
                     Connection = connection
                 })

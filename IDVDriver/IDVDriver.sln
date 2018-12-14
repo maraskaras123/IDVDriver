@@ -8,6 +8,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IDVDriver.Domain", "IDVDriv
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IDVDriver.Utils", "IDVDriver.Utils\IDVDriver.Utils.csproj", "{09A78005-93C5-4988-854C-A6B21DD07D09}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IDVDriver.Tests", "IDVDriver.Tests\IDVDriver.Tests.csproj", "{C32C0B8D-C7AC-4362-8D1C-F76099D4431B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +32,9 @@ Global
 		{09A78005-93C5-4988-854C-A6B21DD07D09}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{09A78005-93C5-4988-854C-A6B21DD07D09}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{09A78005-93C5-4988-854C-A6B21DD07D09}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C32C0B8D-C7AC-4362-8D1C-F76099D4431B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C32C0B8D-C7AC-4362-8D1C-F76099D4431B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C32C0B8D-C7AC-4362-8D1C-F76099D4431B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C32C0B8D-C7AC-4362-8D1C-F76099D4431B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

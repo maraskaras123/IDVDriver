@@ -18,7 +18,7 @@ namespace IDVDriver.BusinessLogic
             {
                 using (var cmd = new SqlCommand()
                 {
-                    CommandText = SqlHelper.CreateInsert(typeof(Expense)),
+                    CommandText = typeof(Expense).CreateInsert(),
                     CommandType = CommandType.Text,
                     Connection = connection
                 })
@@ -46,7 +46,7 @@ namespace IDVDriver.BusinessLogic
             throw new NotImplementedException();
         }
 
-        public bool DeleteExpense(Expense expense)
+        public bool DeleteExpense(int expenseId)
         {
             throw new NotImplementedException();
         }
@@ -59,7 +59,7 @@ namespace IDVDriver.BusinessLogic
             {
                 using (var cmd = new SqlCommand()
                 {
-                    CommandText = SqlHelper.CreateGet(typeof(Expense)),
+                    CommandText = typeof(Expense).CreateGet(),
                     CommandType = CommandType.Text,
                     Connection = connection
                 })
@@ -89,7 +89,7 @@ namespace IDVDriver.BusinessLogic
             {
                 using (var cmd = new SqlCommand()
                 {
-                    CommandText = SqlHelper.CreateGetAll(typeof(Expense)),
+                    CommandText = typeof(Expense).CreateGetAll(),
                     CommandType = CommandType.Text,
                     Connection = connection
                 })

@@ -6,7 +6,7 @@ namespace IDVDriver.Utils
 {
     public static class SqlHelper
     {
-        public static string CreateInsert(Type type)
+        public static string CreateInsert(this Type type)
         {
             var command = $"INSERT INTO {type.Name}s";
             var properties = type.GetProperties().ToList();
@@ -19,12 +19,12 @@ namespace IDVDriver.Utils
             return command;
         }
 
-        public static string CreateGet(Type type)
+        public static string CreateGet(this Type type)
         {
             return $"SELECT * FROM {type.Name}s WHERE Id = @id;";
         }
 
-        public static string CreateGetAll(Type type)
+        public static string CreateGetAll(this Type type)
         {
             var command = $"SELECT * FROM {type.Name}s WHERE Id = @id";
             if (type != typeof(User))
@@ -36,6 +36,12 @@ namespace IDVDriver.Utils
                 command += " AND Type = @type";
             }
             return command + ";";
+        }
+
+        public static string CreateDeleteAll(this Type type)
+        {
+            var command = $"DELETE FROM {type.Name}s;";
+            return command;
         }
     }
 }
