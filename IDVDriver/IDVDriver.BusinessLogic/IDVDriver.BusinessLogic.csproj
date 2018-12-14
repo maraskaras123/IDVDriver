@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\IDVDriver.BusinessContracts\IDVDriver.BusinessContracts.csproj" />
+      <ProjectReference Include="..\IDVDriver.Domain\IDVDriver.Domain.csproj" />
+      <ProjectReference Include="..\IDVDriver.Utils\IDVDriver.Utils.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="System.Data.SqlClient" Version="4.6.0-preview3-27014-02" />
+    </ItemGroup>
+
+</Project>
