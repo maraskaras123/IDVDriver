@@ -1,12 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IDVDriver.BusinessLogic", "IDVDriver.BusinessLogic\IDVDriver.BusinessLogic.csproj", "{92EB13FB-607E-426E-B97F-DD9388CC4DD4}"
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.168
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IDVDriver.BusinessLogic", "IDVDriver.BusinessLogic\IDVDriver.BusinessLogic.csproj", "{92EB13FB-607E-426E-B97F-DD9388CC4DD4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IDVDriver.BusinessContracts", "IDVDriver.BusinessContracts\IDVDriver.BusinessContracts.csproj", "{B1BF53F3-CB25-4AE4-AE1B-6C999575BF90}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IDVDriver.BusinessContracts", "IDVDriver.BusinessContracts\IDVDriver.BusinessContracts.csproj", "{B1BF53F3-CB25-4AE4-AE1B-6C999575BF90}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IDVDriver.Domain", "IDVDriver.Domain\IDVDriver.Domain.csproj", "{3FC9972D-6486-4019-A3C0-AFA82351DC48}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IDVDriver.Domain", "IDVDriver.Domain\IDVDriver.Domain.csproj", "{3FC9972D-6486-4019-A3C0-AFA82351DC48}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IDVDriver.Utils", "IDVDriver.Utils\IDVDriver.Utils.csproj", "{09A78005-93C5-4988-854C-A6B21DD07D09}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IDVDriver.Utils", "IDVDriver.Utils\IDVDriver.Utils.csproj", "{09A78005-93C5-4988-854C-A6B21DD07D09}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IDVDriver.Tests", "IDVDriver.Tests\IDVDriver.Tests.csproj", "{C32C0B8D-C7AC-4362-8D1C-F76099D4431B}"
 EndProject
@@ -36,5 +39,11 @@ Global
 		{C32C0B8D-C7AC-4362-8D1C-F76099D4431B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C32C0B8D-C7AC-4362-8D1C-F76099D4431B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C32C0B8D-C7AC-4362-8D1C-F76099D4431B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {977DA86D-7B3E-4B64-9E7D-6BA6B42169DC}
 	EndGlobalSection
 EndGlobal

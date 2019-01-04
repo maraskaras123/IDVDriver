@@ -11,6 +11,6 @@ namespace IDVDriver.BusinessContracts
         bool DeleteExpense(int expenseId);
         Expense GetExpense(int expenseId);
         List<Expense> GetExpenses(Guid userId, DateTime? from = null, DateTime? to = null, 
-            ExpenseType type = ExpenseType.Fuel);
+            ExpenseType type = ExpenseType.None);
     }
 }

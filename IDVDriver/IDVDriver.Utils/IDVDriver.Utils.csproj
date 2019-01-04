@@ -5,7 +5,18 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.2.0" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.2.0" />
+    </ItemGroup>
+
+    <ItemGroup>
       <ProjectReference Include="..\IDVDriver.Domain\IDVDriver.Domain.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Reference Include="Microsoft.EntityFrameworkCore">
+        <HintPath>..\packages\Microsoft.EntityFrameworkCore.2.2.0\lib\netstandard2.0\Microsoft.EntityFrameworkCore.dll</HintPath>
+      </Reference>
     </ItemGroup>
 
 </Project>

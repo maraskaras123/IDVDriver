@@ -1,6 +1,4 @@
 using System;
-using System.Data;
-using System.Data.SqlClient;
 using IDVDriver.BusinessContracts;
 using IDVDriver.BusinessLogic;
 using IDVDriver.Domain;
@@ -14,16 +12,21 @@ namespace IDVDriver.Tests
     {
         private IExpenseService expenseService;
         private Expense expense1, expense2;
-        private Guid userId = new Guid();
-        private string connectionString = "";
+        private Guid userId = Guid.NewGuid();
         
         [SetUp]
         protected override void SetUp()
         {
             expenseService = new ExpenseService
             {
-                ConnectionString = connectionString
+                ConnectionString = ConnectionString
             };
+
+            using (var context = new IDVContext(ConnectionString))
+            {
+                context.Users.Add(new User { Id = userId });
+                context.SaveChanges();
+            }
 
             expense1 = new Expense
             {
@@ -42,20 +45,14 @@ namespace IDVDriver.Tests
             };
         }
 
+        [TearDown]
         protected override void Dispose()
         {
-            using (var connection = new SqlConnection(connectionString))
+            using (var context = new IDVContext(ConnectionString))
             {
-                using (var cmd = new SqlCommand
-                {
-                    CommandText = typeof(Expense).CreateDeleteAll(),
-                    CommandType = CommandType.Text,
-                    Connection = connection
-                })
-                {
-                    connection.Open();
-                    cmd.ExecuteNonQuery();
-                }
+                context.Expenses.RemoveRange(context.Expenses);
+                context.Users.RemoveRange(context.Users);
+                context.SaveChanges();
             }
         }
 
@@ -65,9 +62,11 @@ namespace IDVDriver.Tests
         {
             expense1.Id = expenseService.CreateExpense(expense1);
 
-            expense1.Id.ShouldNotEqual(1);
+            expense1.Id.ShouldNotBeNull();
         }
 
+        [Test]
+        [Category("Expense")]
         public override void Can_get_item_by_id()
         {
             expense1.Id = expenseService.CreateExpense(expense1);
@@ -76,6 +75,8 @@ namespace IDVDriver.Tests
             expenseFromDb.ShouldNotBeNull();
         }
 
+        [Test]
+        [Category("Expense")]
         public override void Can_get_items()
         {
             expense1.Id = expenseService.CreateExpense(expense1);
@@ -88,6 +89,34 @@ namespace IDVDriver.Tests
             expensesFromDb[1].Amount.ShouldEqual(45.99);
         }
 
+        [Test]
+        [Category("Expense")]
+        public void Can_get_items_in_date_range()
+        {
+            expense1.Id = expenseService.CreateExpense(expense1);
+            expense2.Id = expenseService.CreateExpense(expense2);
+
+            var expensesFromDb = expenseService.GetExpenses(userId, new DateTime(2018, 12, 10));
+
+            expensesFromDb.Count.ShouldEqual(1);
+            expensesFromDb[0].Id.ShouldEqual(expense2.Id);
+        }
+
+        [Test]
+        [Category("Expense")]
+        public void Can_get_items_by_type()
+        {
+            expense1.Id = expenseService.CreateExpense(expense1);
+            expense2.Id = expenseService.CreateExpense(expense2);
+
+            var expensesFromDb = expenseService.GetExpenses(userId, type: ExpenseType.Service);
+
+            expensesFromDb.Count.ShouldEqual(1);
+            expensesFromDb[0].Id.ShouldEqual(expense2.Id);
+        }
+
+        [Test]
+        [Category("Expense")]
         public override void Can_delete_item()
         {
             expense1.Id = expenseService.CreateExpense(expense1);
@@ -97,6 +126,8 @@ namespace IDVDriver.Tests
             expensesFromDb.Count.ShouldEqual(0);
         }
 
+        [Test]
+        [Category("Expense")]
         public override void Can_update_item()
         {
             expense1.Id = expenseService.CreateExpense(expense1);

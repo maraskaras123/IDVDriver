@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Data;
-using System.Data.SqlClient;
 using IDVDriver.BusinessContracts;
 using IDVDriver.BusinessLogic;
 using IDVDriver.Domain;
@@ -14,16 +12,21 @@ namespace IDVDriver.Tests
     {
         private IIncomeService incomeService;
         private Income income1, income2;
-        private Guid userId = new Guid();
-        private string connectionString = "";
+        private Guid userId = Guid.NewGuid();
         
         [SetUp]
         protected override void SetUp()
         {
             incomeService = new IncomeService
             {
-                ConnectionString = connectionString
+                ConnectionString = ConnectionString
             };
+
+            using (var context = new IDVContext(ConnectionString))
+            {
+                context.Users.Add(new User { Id = userId });
+                context.SaveChanges();
+            }
 
             income1 = new Income
             {
@@ -39,21 +42,14 @@ namespace IDVDriver.Tests
                 Amount = 45.99
             };
         }
-
+        [TearDown]
         protected override void Dispose()
         {
-            using (var connection = new SqlConnection(connectionString))
+            using (var context = new IDVContext(ConnectionString))
             {
-                using (var cmd = new SqlCommand
-                {
-                    CommandText = typeof(Income).CreateDeleteAll(),
-                    CommandType = CommandType.Text,
-                    Connection = connection
-                })
-                {
-                    connection.Open();
-                    cmd.ExecuteNonQuery();
-                }
+                context.Incomes.RemoveRange(context.Incomes);
+                context.Users.RemoveRange(context.Users);
+                context.SaveChanges();
             }
         }
 
@@ -63,9 +59,11 @@ namespace IDVDriver.Tests
         {
             income1.Id = incomeService.CreateIncome(income1);
 
-            income1.Id.ShouldNotEqual(1);
+            income1.Id.ShouldNotBeNull();
         }
 
+        [Test]
+        [Category("Income")]
         public override void Can_get_item_by_id()
         {
             income1.Id = incomeService.CreateIncome(income1);
@@ -74,6 +72,8 @@ namespace IDVDriver.Tests
             incomeFromDb.ShouldNotBeNull();
         }
 
+        [Test]
+        [Category("Income")]
         public override void Can_get_items()
         {
             income1.Id = incomeService.CreateIncome(income1);
@@ -86,6 +86,21 @@ namespace IDVDriver.Tests
             incomesFromDb[1].Amount.ShouldEqual(45.99);
         }
 
+        [Test]
+        [Category("Income")]
+        public void Can_get_items_in_date_range()
+        {
+            income1.Id = incomeService.CreateIncome(income1);
+            income2.Id = incomeService.CreateIncome(income2);
+
+            var incomesFromDb = incomeService.GetIncomes(userId, new DateTime(2018, 12, 10));
+
+            incomesFromDb.Count.ShouldEqual(1);
+            incomesFromDb[0].Id.ShouldEqual(income2.Id);
+        }
+
+        [Test]
+        [Category("Income")]
         public override void Can_delete_item()
         {
             income1.Id = incomeService.CreateIncome(income1);
@@ -95,6 +110,8 @@ namespace IDVDriver.Tests
             incomesFromDb.Count.ShouldEqual(0);
         }
 
+        [Test]
+        [Category("Income")]
         public override void Can_update_item()
         {
             income1.Id = incomeService.CreateIncome(income1);

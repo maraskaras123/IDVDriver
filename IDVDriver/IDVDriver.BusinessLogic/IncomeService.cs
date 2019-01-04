@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Data.SqlClient;
+using System.Linq;
 using IDVDriver.BusinessContracts;
 using IDVDriver.Domain;
 using IDVDriver.Utils;
@@ -14,106 +13,62 @@ namespace IDVDriver.BusinessLogic
         
         public int CreateIncome(Income income)
         {
-            using (var connection = new SqlConnection(ConnectionString))
+            using (var context = new IDVContext(ConnectionString))
             {
-                using (var cmd = new SqlCommand
-                {
-                    CommandText = typeof(Income).CreateInsert(),
-                    CommandType = CommandType.Text,
-                    Connection = connection
-                })
-                {
-                    cmd.Parameters.Add("@userId", SqlDbType.UniqueIdentifier).Value = income.UserId;
-                    cmd.Parameters.Add("@date", SqlDbType.Date).Value = income.Date;
-                    cmd.Parameters.Add("@amount", SqlDbType.Float).Value = income.Amount;
-                    connection.Open();
-                    using(var reader = cmd.ExecuteReader())
-                    {
-                        if(reader.Read())
-                        {
-                            return (int) reader[0];
-                        }
-                    }
-                }
+                context.Incomes.Add(income);
+                context.SaveChanges();
+                return context.Incomes.Last().Id;
             }
-
-            throw new NotImplementedException();
         }
 
         public bool UpdateIncome(Income income)
         {
-            throw new NotImplementedException();
+            using (var context = new IDVContext(ConnectionString))
+            {
+                var incomeFromDb = context.Incomes.First(x => x.Id == income.Id);
+                incomeFromDb.Amount = income.Amount;
+                incomeFromDb.Date = income.Date;
+                var count = context.SaveChanges();
+                return count > 0;
+            }
         }
 
         public bool DeleteIncome(int incomeId)
         {
-            throw new NotImplementedException();
+            using (var context = new IDVContext(ConnectionString))
+            {
+                var income = context.Incomes.First(x => x.Id == incomeId);
+                context.Incomes.Remove(income);
+                var count = context.SaveChanges();
+                return count > 0;
+            }
         }
 
         public Income GetIncome(int incomeId)
         {
-            var income = new Income();
-            using (var connection = new SqlConnection(ConnectionString))
+            using (var context = new IDVContext(ConnectionString))
             {
-                using (var cmd = new SqlCommand
-                {
-                    CommandText = typeof(Income).CreateGet(),
-                    CommandType = CommandType.Text,
-                    Connection = connection
-                })
-                {
-                    cmd.Parameters.Add("@id", SqlDbType.Int).Value = incomeId;
-                    connection.Open();
-                    using(var reader = cmd.ExecuteReader())
-                    {
-                        if (!reader.Read()) return income;
-                        
-                        income.Id = (int) reader[0];
-                        income.UserId = (Guid) reader[1];
-                        income.Amount = (double) reader[2];
-                        income.Date = (DateTime) reader[3];
-                    }
-                }
+                return context.Incomes.First(x => x.Id == incomeId);
             }
-
-            return income;
         }
 
         public List<Income> GetIncomes(Guid userId, DateTime? from = null, DateTime? to = null)
         {
-            var incomes = new List<Income>();
-            using (var connection = new SqlConnection(ConnectionString))
+            using (var context = new IDVContext(ConnectionString))
             {
-                using (var cmd = new SqlCommand
-                {
-                    CommandText = typeof(Income).CreateGetAll(),
-                    CommandType = CommandType.Text,
-                    Connection = connection
-                })
-                {
-                    cmd.Parameters.Add("@userId", SqlDbType.UniqueIdentifier).Value = userId;
-                    cmd.Parameters.Add("@from", SqlDbType.Date).Value = 
-                        from ?? new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
-                    cmd.Parameters.Add("@to", SqlDbType.Date).Value = 
-                        to ?? new DateTime(DateTime.Today.Year, DateTime.Today.Month + 1, 1);
-                    connection.Open();
-                    using(var reader = cmd.ExecuteReader())
-                    {
-                        while(reader.Read())
-                        {
-                            incomes.Add(new Income
-                            {
-                                Id = (int) reader[0],
-                                UserId = (Guid) reader[1],
-                                Amount = (double) reader[2],
-                                Date = (DateTime) reader[3]
-                            });
-                        }
-                    }
-                }
-            }
+                var incomes = context.Incomes.Where(x => x.UserId == userId).ToList();
 
-            return incomes;
+                if (from != null)
+                {
+                    incomes = incomes.Where(x => x.Date >= from).ToList();
+                }
+                if (to != null)
+                {
+                    incomes = incomes.Where(x => x.Date <= to).ToList();
+                }
+
+                return incomes;
+            }
         }
     }
 }
