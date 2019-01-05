@@ -64,6 +64,16 @@ namespace IDVDriver.Tests
 
         [Test]
         [Category("Income")]
+        public override void Cannot_insert_item_to_database_if_validation_doesnt_pass()
+        {
+            income1.UserId = new Guid();
+
+            var exception = typeof(BusinessException).ShouldBeThrownBy(() => incomeService.CreateIncome(income1));
+            exception.Message.ShouldEqual("Cannot create income");
+        }
+
+        [Test]
+        [Category("Income")]
         public override void Can_get_item_by_id()
         {
             income1.Id = incomeService.CreateIncome(income1);

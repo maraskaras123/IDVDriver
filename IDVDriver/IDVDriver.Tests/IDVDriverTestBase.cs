@@ -5,6 +5,9 @@ namespace IDVDriver.Tests
         // insert
         public abstract void Can_insert_item_to_database();
 
+        // insert - validation fail
+        public abstract void Cannot_insert_item_to_database_if_validation_doesnt_pass();
+
         // get 
         public abstract void Can_get_item_by_id();
         

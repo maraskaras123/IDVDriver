@@ -13,23 +13,41 @@ namespace IDVDriver.BusinessLogic
         
         public int CreateExpense(Expense expense)
         {
-            using (var context = new IDVContext(ConnectionString))
+            var validator = new ExpenseValidator();
+            var results = validator.Validate(expense);
+            if (results.IsValid)
             {
-                context.Expenses.Add(expense);
-                context.SaveChanges();
-                return context.Expenses.Last().Id;
+                using (var context = new IDVContext(ConnectionString))
+                {
+                    context.Expenses.Add(expense);
+                    context.SaveChanges();
+                    return context.Expenses.Last().Id;
+                }
+            }
+            else
+            {
+                throw new BusinessException("Cannot create expense", results.Errors);
             }
         }
 
         public bool UpdateExpense(Expense expense)
         {
-            using (var context = new IDVContext(ConnectionString))
+            var validator = new ExpenseValidator();
+            var results = validator.Validate(expense);
+            if (results.IsValid)
             {
-                var expenseFromDb = context.Expenses.First(x => x.Id == expense.Id);
-                expenseFromDb.Amount = expense.Amount;
-                expenseFromDb.Date = expense.Date;
-                var count = context.SaveChanges();
-                return count > 0;
+                using (var context = new IDVContext(ConnectionString))
+                {
+                    var expenseFromDb = context.Expenses.First(x => x.Id == expense.Id);
+                    expenseFromDb.Amount = expense.Amount;
+                    expenseFromDb.Date = expense.Date;
+                    var count = context.SaveChanges();
+                    return count > 0;
+                }
+            }
+            else
+            {
+                throw new BusinessException("Cannot update expense", results.Errors);
             }
         }
 

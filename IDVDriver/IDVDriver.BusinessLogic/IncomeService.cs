@@ -13,24 +13,43 @@ namespace IDVDriver.BusinessLogic
         
         public int CreateIncome(Income income)
         {
-            using (var context = new IDVContext(ConnectionString))
+            var validator = new IncomeValidator();
+            var results = validator.Validate(income);
+            if (results.IsValid)
             {
-                context.Incomes.Add(income);
-                context.SaveChanges();
-                return context.Incomes.Last().Id;
+                using (var context = new IDVContext(ConnectionString))
+                {
+                    context.Incomes.Add(income);
+                    context.SaveChanges();
+                    return context.Incomes.Last().Id;
+                }
             }
+            else
+            {
+                throw new BusinessException("Cannot create income", results.Errors);
+            } 
         }
 
         public bool UpdateIncome(Income income)
         {
-            using (var context = new IDVContext(ConnectionString))
+            var validator = new IncomeValidator();
+            var results = validator.Validate(income);
+            if (results.IsValid)
             {
-                var incomeFromDb = context.Incomes.First(x => x.Id == income.Id);
-                incomeFromDb.Amount = income.Amount;
-                incomeFromDb.Date = income.Date;
-                var count = context.SaveChanges();
-                return count > 0;
+                using (var context = new IDVContext(ConnectionString))
+                {
+                    var incomeFromDb = context.Incomes.First(x => x.Id == income.Id);
+                    incomeFromDb.Amount = income.Amount;
+                    incomeFromDb.Date = income.Date;
+                    var count = context.SaveChanges();
+                    return count > 0;
+                }
             }
+            else
+            {
+                throw new BusinessException("Cannot update income", results.Errors);
+            }
+            
         }
 
         public bool DeleteIncome(int incomeId)

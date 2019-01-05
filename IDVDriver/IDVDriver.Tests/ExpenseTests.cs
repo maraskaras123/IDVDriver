@@ -67,6 +67,16 @@ namespace IDVDriver.Tests
 
         [Test]
         [Category("Expense")]
+        public override void Cannot_insert_item_to_database_if_validation_doesnt_pass()
+        {
+            expense1.UserId = new Guid();
+
+            var exception = typeof(BusinessException).ShouldBeThrownBy(() => expenseService.CreateExpense(expense1));
+            exception.Message.ShouldEqual("Cannot create expense");
+        }
+
+        [Test]
+        [Category("Expense")]
         public override void Can_get_item_by_id()
         {
             expense1.Id = expenseService.CreateExpense(expense1);
